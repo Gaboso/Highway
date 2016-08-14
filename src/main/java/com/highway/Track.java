@@ -46,17 +46,16 @@ public class Track extends JFrame implements Runnable {
     private static final Color COLOR_BOUNDARY = Color.decode("#D32F2F");
     private static final Color COLOR_TIRE = Color.decode("#212121");
 
+    //Fonts
     private static final Font FONT_TITLE = new Font("Trebuchet MS", Font.BOLD, 14);
     private static final Font FONT_NORMAL = new Font("Trebuchet MS", Font.PLAIN, 12);
 
-    int x;
-    int y;
-    int xDirection;
-    int yDirection;
+    private int x;
+    private int y;
+    private int xDirection;
+    private int yDirection;
 
     private Rectangle meCar = new Rectangle(x, y, 20, 50);
-
-    int yy = 1;
 
     private Rectangle road = new Rectangle(65, 0, 285, 1000);
     private Rectangle leftBoundary = new Rectangle(45, 20, 20, 500);
@@ -73,23 +72,23 @@ public class Track extends JFrame implements Runnable {
     private Rectangle leftKerbTwo = new Rectangle(45, 300, 20, 40);
     private Rectangle leftKerbThree = new Rectangle(350, 300, 20, 40);
 
-    int sd = 0;
-    int s1 = -30;
-    int s2 = 0;
-    int w = 0;
+    private int sd = 0;
+    private int s1 = -30;
+    private int s2 = 0;
+    private int w = 0;
 
-    public Track() {
+    private Track() {
         setBackground(BACKGROUND_COLOR);
         addKeyListener(new AL());
-        setTitle("Speed Up");
+        setTitle("Endless");
         setSize(510, 400);
+        setIconImage(new ImageIcon(Track.class.getResource("/icon.png")).getImage());
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         meCar.x = 200;
         meCar.y = 350;
-        yy = 1;
     }
 
     private void move() {
@@ -157,7 +156,7 @@ public class Track extends JFrame implements Runnable {
         }
     }
 
-    public class AL extends KeyAdapter {
+    private class AL extends KeyAdapter {
 
         private void setXDirection(int xdir) {
             xDirection = xdir;
@@ -230,6 +229,9 @@ public class Track extends JFrame implements Runnable {
         //Me car
         g.setColor(COLOR_ME_CAR);
         g.fillRect(meCar.x, meCar.y, 20, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(FONT_TITLE);
+        g.drawString("10", meCar.x + 2, meCar.y + 30);
         //Tires of me car
         g.setColor(COLOR_TIRE);
         g.fillRect(meCar.x + 20, meCar.y + 5, 5, 5);
@@ -240,6 +242,9 @@ public class Track extends JFrame implements Runnable {
         //Car one
         g.setColor(COLOR_CAR_ONE);
         g.fillRect(carOne.x, meCar.y - s1 - sd, 20, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(FONT_TITLE);
+        g.drawString("51", carOne.x + 3, (meCar.y - s1 - sd) + 30);
         //Tires of car one
         g.setColor(COLOR_TIRE);
         g.fillRect(carOne.x + 20, meCar.y - s1 - sd + 5, 5, 5);
@@ -250,6 +255,9 @@ public class Track extends JFrame implements Runnable {
         //Car two
         g.setColor(COLOR_CAR_TWO);
         g.fillRect(cartTwo.x, meCar.y - s2 - sd, 20, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(FONT_TITLE);
+        g.drawString("99", cartTwo.x + 3, (meCar.y - s2 - sd) + 30);
         //Tires of car two
         g.setColor(COLOR_TIRE);
         g.fillRect(cartTwo.x + 20, meCar.y - s2 - sd + 5, 5, 5);
@@ -262,11 +270,11 @@ public class Track extends JFrame implements Runnable {
         g.drawString("Distance travelled", 380, 170);
 
         g.setFont(FONT_NORMAL);
-        String r1 = "Me     " + (-sd);
+        String r1 = "Me:         " + (-sd);
         g.drawString(r1, 380, 190);
-        r1 = "C1     " + (s1);
+        r1 = "Red Devil: " + (s1);
         g.drawString(r1, 380, 210);
-        r1 = "C2     " + (s2);
+        r1 = "Mad Dog:  " + (s2);
         g.drawString(r1, 380, 230);
 
         g.setFont(FONT_TITLE);
@@ -292,9 +300,9 @@ public class Track extends JFrame implements Runnable {
 
     private String getNameFromDriver(int distanceTravelled) {
         if (s1 - distanceTravelled == 0)
-            return "C1";
+            return "Red Devil";
         else if (s2 - distanceTravelled == 0)
-            return "C2";
+            return "Mad Dog";
         else
             return "Me";
     }
@@ -314,7 +322,7 @@ public class Track extends JFrame implements Runnable {
 
     public static void main(String[] args) {
         String message = "Be Ready to Fly your Car";
-        int result = JOptionPane.showConfirmDialog(null, message, "Speed Up", JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(null, message, "Endless", JOptionPane.OK_CANCEL_OPTION);
 
         // Result equals OK
         if (result == 0) {
