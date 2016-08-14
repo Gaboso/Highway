@@ -36,18 +36,24 @@ public class Track extends JFrame implements Runnable {
     int x, y;
     int xDirection, yDirection, rectx, recty;
     int bx, by;
+
     Font font = new Font("ARIAL", Font.BOLD | Font.ITALIC, 20);
     int t1 = 0, score = 0;
+
     double pp = 0.0;
     double pp1 = 0.0;
+
     Rectangle MyShip = new Rectangle(x, y, 20, 50);
     int controlx = 1, controly = 1;
     int yy = 1;
+
     Rectangle boundary = new Rectangle(5, 380, 500, 20);
     Rectangle road = new Rectangle(65, 0, 285, 1000);
     Rectangle boundary2 = new Rectangle(45, 20, 20, 500);
     Rectangle boundary3 = new Rectangle(350, 20, 20, 500);
+
     int c = 1;
+
     Rectangle c1 = new Rectangle(100, 380, 20, 30);
     Rectangle c2 = new Rectangle(300, 350, 30, 10);
     Rectangle illu11 = new Rectangle(45, 90, 20, 20);
@@ -56,26 +62,38 @@ public class Track extends JFrame implements Runnable {
     Rectangle illu22 = new Rectangle(350, 200, 20, 20);
     Rectangle illu13 = new Rectangle(45, 300, 20, 20);
     Rectangle illu23 = new Rectangle(350, 300, 20, 20);
+
     int sd = 0, s1 = -30, s2 = 0;
     int w = 0;
+
     private Graphics dbg;
     private Image dbImage;
 
     public void move() {
         int cv = 2, cd = 2;
-        if (w % 13 == 0) cv = 5;
-        else if (w % 17 == 0) cv = 2;
-        if (w % 11 == 0) cd = 5;
-        else if (w % 17 == 0) cd = 2;
-        else if (w % 100 == 0) cd = 15;
+
+        if (w % 13 == 0)
+            cv = 5;
+        else if (w % 17 == 0)
+            cv = 2;
+
+        if (w % 11 == 0)
+            cd = 5;
+        else if (w % 17 == 0)
+            cd = 2;
+        else if (w % 100 == 0)
+            cd = 15;
+
         MyShip.x += xDirection;
         MyShip.y += yDirection;
+
         c1.y += cd;
         c2.y += cv;
         sd += yDirection;
         s1 += cd;
         s2 += cv;
         w++;
+
         if (yDirection == -3) {
             illu11.y -= yDirection;
             illu12.y -= yDirection;
@@ -92,6 +110,7 @@ public class Track extends JFrame implements Runnable {
             MyShip.y = 150;
         if (MyShip.y > 380)
             MyShip.y = 380;
+
         if (c1.x <= 50)
             c1.x = 50;
         if (c1.x >= 350)
@@ -100,6 +119,7 @@ public class Track extends JFrame implements Runnable {
             c1.y = 140;
         if (c1.y > 380)
             c1.y = 380;
+
         if (c2.x <= 50)
             c2.x = 50;
         if (c2.x >= 350)
@@ -108,6 +128,7 @@ public class Track extends JFrame implements Runnable {
             c2.y = 155;
         if (c2.y > 380)
             c2.y = 380;
+
         if (illu11.y >= 350)
             illu11.y = 50;
         if (illu12.y >= 350)
@@ -175,6 +196,7 @@ public class Track extends JFrame implements Runnable {
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         MyShip.x = 200;
         MyShip.y = 350;
         yy = 1;
@@ -225,6 +247,7 @@ public class Track extends JFrame implements Runnable {
         g.fillRect(c2.x + 20, MyShip.y - s2 - sd + 40, 5, 5);
         g.fillRect(c2.x - 5, MyShip.y - s2 - sd + 40, 5, 5);
         g.drawString("Car - Dist. travelled", 380, 170);
+
         String r1 = "Me     " + (-sd);
         g.drawString(r1, 380, 190);
         r1 = "C1     " + (s1);
@@ -233,35 +256,59 @@ public class Track extends JFrame implements Runnable {
         g.drawString(r1, 380, 230);
         r1 = "Rank";
         g.drawString(r1, 380, 250);
+
         int m = Math.max(s1, Math.max(s2, -sd));
         String p;
-        if (s1 - m == 0) p = "C1";
-        else if (s2 - m == 0) p = "C2";
-        else p = "Me";
+
+        if (s1 - m == 0)
+            p = "C1";
+        else if (s2 - m == 0)
+            p = "C2";
+        else
+            p = "Me";
+
         r1 = "1." + p;
         g.drawString(r1, 380, 270);
         int m1 = Math.min(s1, Math.min(s2, -sd));
-        if (s1 - m1 == 0) p = "C1";
-        else if (s2 - m1 == 0) p = "C2";
-        else p = "Me";
+
+        if (s1 - m1 == 0)
+            p = "C1";
+        else if (s2 - m1 == 0)
+            p = "C2";
+        else
+            p = "Me";
+
         r1 = "3." + p;
         g.drawString(r1, 380, 310);
         m = s1 + s2 - sd - m - m1;
-        if (s1 - m == 0) p = "C1";
-        else if (s2 - m == 0) p = "C2";
-        else p = "Me";
+
+        if (s1 - m == 0)
+            p = "C1";
+        else if (s2 - m == 0)
+            p = "C2";
+        else
+            p = "Me";
+
         r1 = "2." + p;
         g.drawString(r1, 380, 290);
         repaint();
     }
 
     public static void main(String[] args) {
-        String message = "BE READY TO FLY YOUR TRUCK";
-        JOptionPane pane = new JOptionPane(message);
-        JDialog dialog = pane.createDialog(new JFrame(), "Dilaog");
-        dialog.setVisible(true);
-        Track su = new Track();
-        Thread t1 = new Thread(su);
-        t1.start();
+        String message = "Be Ready to Fly your Truck";
+        int result = JOptionPane.showConfirmDialog(null, message, "Dialog", JOptionPane.OK_CANCEL_OPTION);
+
+        // Result equals OK
+        if (result == 0) {
+            Track su = new Track();
+            Thread t1 = new Thread(su);
+            t1.start();
+        } else {
+            // Result not equals OK
+            System.exit(0);
+        }
+
+
     }
+
 }
