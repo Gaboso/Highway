@@ -40,30 +40,38 @@ public class Track extends JFrame implements Runnable {
 
     //Colors
     private static final Color BACKGROUND_COLOR = Color.decode("#4CAF50");
-    private static final Color OTHER_CAR_ONE = Color.decode("#D50000");
-    private static final Color OTHER_CAR_TWO = Color.decode("#00C853");
-    private static final Color ME_CAR = Color.decode("#0091EA");
+    private static final Color COLOR_CAR_ONE = Color.decode("#D50000");
+    private static final Color COLOR_CAR_TWO = Color.decode("#00C853");
+    private static final Color COLOR_ME_CAR = Color.decode("#0091EA");
+    private static final Color COLOR_BOUNDARY = Color.decode("#D32F2F");
+    private static final Color COLOR_TIRE = Color.decode("#212121");
+
+    private static final Font FONT_TITLE = new Font("Trebuchet MS", Font.BOLD, 14);
+    private static final Font FONT_NORMAL = new Font("Trebuchet MS", Font.PLAIN, 12);
 
     int x;
     int y;
     int xDirection;
     int yDirection;
 
-    Rectangle myShip = new Rectangle(x, y, 20, 50);
+    private Rectangle meCar = new Rectangle(x, y, 20, 50);
+
     int yy = 1;
 
-    Rectangle road = new Rectangle(65, 0, 285, 1000);
-    Rectangle boundary2 = new Rectangle(45, 20, 20, 500);
-    Rectangle boundary3 = new Rectangle(350, 20, 20, 500);
+    private Rectangle road = new Rectangle(65, 0, 285, 1000);
+    private Rectangle leftBoundary = new Rectangle(45, 20, 20, 500);
+    private Rectangle rightBoundary = new Rectangle(350, 20, 20, 500);
 
-    Rectangle c1 = new Rectangle(100, 380, 20, 30);
-    Rectangle c2 = new Rectangle(300, 350, 30, 10);
-    Rectangle illu11 = new Rectangle(45, 90, 20, 20);
-    Rectangle illu21 = new Rectangle(350, 90, 20, 20);
-    Rectangle illu12 = new Rectangle(45, 200, 20, 20);
-    Rectangle illu22 = new Rectangle(350, 200, 20, 20);
-    Rectangle illu13 = new Rectangle(45, 300, 20, 20);
-    Rectangle illu23 = new Rectangle(350, 300, 20, 20);
+    private Rectangle carOne = new Rectangle(100, 380, 20, 30);
+    private Rectangle cartTwo = new Rectangle(300, 350, 30, 10);
+
+    private Rectangle rightKerbOne = new Rectangle(45, 90, 20, 40);
+    private Rectangle rightKerbTwo = new Rectangle(350, 90, 20, 40);
+    private Rectangle rightKerbThree = new Rectangle(45, 200, 20, 40);
+
+    private Rectangle leftKerbOne = new Rectangle(350, 200, 20, 40);
+    private Rectangle leftKerbTwo = new Rectangle(45, 300, 20, 40);
+    private Rectangle leftKerbThree = new Rectangle(350, 300, 20, 40);
 
     int sd = 0;
     int s1 = -30;
@@ -74,17 +82,17 @@ public class Track extends JFrame implements Runnable {
         setBackground(BACKGROUND_COLOR);
         addKeyListener(new AL());
         setTitle("Speed Up");
-        setSize(500, 400);
+        setSize(510, 400);
         setResizable(false);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        myShip.x = 200;
-        myShip.y = 350;
+        meCar.x = 200;
+        meCar.y = 350;
         yy = 1;
     }
 
-    public void move() {
+    private void move() {
         int cv = 2;
         int cd = 2;
 
@@ -100,63 +108,41 @@ public class Track extends JFrame implements Runnable {
         else if (w % 100 == 0)
             cd = 15;
 
-        myShip.x += xDirection;
-        myShip.y += yDirection;
+        meCar.x += xDirection;
+        meCar.y += yDirection;
 
-        c1.y += cd;
-        c2.y += cv;
+        carOne.y += cd;
+        cartTwo.y += cv;
         sd += yDirection;
         s1 += cd;
         s2 += cv;
         w++;
 
         if (yDirection == -3) {
-            illu11.y -= yDirection;
-            illu12.y -= yDirection;
-            illu13.y -= yDirection;
-            illu21.y -= yDirection;
-            illu22.y -= yDirection;
-            illu23.y -= yDirection;
+            rightKerbOne.y -= yDirection;
+            rightKerbThree.y -= yDirection;
+            leftKerbTwo.y -= yDirection;
+            rightKerbTwo.y -= yDirection;
+            leftKerbOne.y -= yDirection;
+            leftKerbThree.y -= yDirection;
         }
-        if (myShip.x <= 50)
-            myShip.x = 50;
-        if (myShip.x >= 350)
-            myShip.x = 350;
-        if (myShip.y <= 150)
-            myShip.y = 150;
-        if (myShip.y > 380)
-            myShip.y = 380;
 
-        if (c1.x <= 50)
-            c1.x = 50;
-        if (c1.x >= 350)
-            c1.x = 350;
-        if (c1.y <= 140)
-            c1.y = 140;
-        if (c1.y > 380)
-            c1.y = 380;
+        meCar = setXandYToCar(meCar, 150);
+        carOne = setXandYToCar(carOne, 140);
+        cartTwo = setXandYToCar(cartTwo, 155);
 
-        if (c2.x <= 50)
-            c2.x = 50;
-        if (c2.x >= 350)
-            c2.x = 350;
-        if (c2.y <= 155)
-            c2.y = 155;
-        if (c2.y > 380)
-            c2.y = 380;
-
-        if (illu11.y >= 350)
-            illu11.y = 50;
-        if (illu12.y >= 350)
-            illu12.y = 50;
-        if (illu13.y >= 350)
-            illu13.y = 50;
-        if (illu21.y >= 350)
-            illu21.y = 50;
-        if (illu22.y >= 350)
-            illu22.y = 50;
-        if (illu23.y >= 350)
-            illu23.y = 50;
+        if (rightKerbOne.y >= 350)
+            rightKerbOne.y = 50;
+        if (rightKerbThree.y >= 350)
+            rightKerbThree.y = 50;
+        if (leftKerbTwo.y >= 350)
+            leftKerbTwo.y = 50;
+        if (rightKerbTwo.y >= 350)
+            rightKerbTwo.y = 50;
+        if (leftKerbOne.y >= 350)
+            leftKerbOne.y = 50;
+        if (leftKerbThree.y >= 350)
+            leftKerbThree.y = 50;
     }
 
     @Override
@@ -217,104 +203,118 @@ public class Track extends JFrame implements Runnable {
     }
 
     private void paintComponent(Graphics g) {
-        g.setColor(Color.YELLOW);
-        g.fillRect(boundary2.x, boundary2.y, boundary2.width, boundary2.height);
-        g.fillRect(boundary3.x, boundary3.y, boundary3.width, boundary3.height);
-
-        g.setColor(Color.GRAY);
+        //Left boundary
+        g.setColor(COLOR_BOUNDARY);
+        g.fillRect(leftBoundary.x, leftBoundary.y, leftBoundary.width, leftBoundary.height);
+        //Right boundary
+        g.setColor(COLOR_BOUNDARY);
+        g.fillRect(rightBoundary.x, rightBoundary.y, rightBoundary.width, rightBoundary.height);
+        //Road
+        g.setColor(Color.DARK_GRAY);
         g.fillRect(road.x, road.y, road.width, road.height);
+        //Lane dividers
+        g.setColor(Color.YELLOW);
+        g.fillRect(rightKerbOne.x + 170, rightKerbOne.y, 5, 25);
+        g.fillRect(leftKerbTwo.x + 170, leftKerbTwo.y, 5, 25);
+        g.fillRect(rightKerbThree.x + 170, rightKerbThree.y, 5, 25);
+        //Right kerbs
+        g.setColor(Color.WHITE);
+        g.fillRect(rightKerbOne.x, rightKerbOne.y, rightKerbOne.width, rightKerbOne.height);
+        g.fillRect(leftKerbTwo.x, leftKerbTwo.y, leftKerbTwo.width, leftKerbTwo.height);
+        g.fillRect(rightKerbThree.x, rightKerbThree.y, rightKerbThree.width, rightKerbThree.height);
+        //Left kerbs
+        g.fillRect(leftKerbOne.x, leftKerbOne.y, leftKerbOne.width, leftKerbOne.height);
+        g.fillRect(rightKerbTwo.x, rightKerbTwo.y, rightKerbTwo.width, rightKerbTwo.height);
+        g.fillRect(leftKerbThree.x, leftKerbThree.y, leftKerbThree.width, leftKerbThree.height);
+
+        //Me car
+        g.setColor(COLOR_ME_CAR);
+        g.fillRect(meCar.x, meCar.y, 20, 50);
+        //Tires of me car
+        g.setColor(COLOR_TIRE);
+        g.fillRect(meCar.x + 20, meCar.y + 5, 5, 5);
+        g.fillRect(meCar.x - 5, meCar.y + 5, 5, 5);
+        g.fillRect(meCar.x + 20, meCar.y + 40, 5, 5);
+        g.fillRect(meCar.x - 5, meCar.y + 40, 5, 5);
+
+        //Car one
+        g.setColor(COLOR_CAR_ONE);
+        g.fillRect(carOne.x, meCar.y - s1 - sd, 20, 50);
+        //Tires of car one
+        g.setColor(COLOR_TIRE);
+        g.fillRect(carOne.x + 20, meCar.y - s1 - sd + 5, 5, 5);
+        g.fillRect(carOne.x - 5, meCar.y - s1 - sd + 5, 5, 5);
+        g.fillRect(carOne.x + 20, meCar.y - s1 - sd + 40, 5, 5);
+        g.fillRect(carOne.x - 5, meCar.y - s1 - sd + 40, 5, 5);
+
+        //Car two
+        g.setColor(COLOR_CAR_TWO);
+        g.fillRect(cartTwo.x, meCar.y - s2 - sd, 20, 50);
+        //Tires of car two
+        g.setColor(COLOR_TIRE);
+        g.fillRect(cartTwo.x + 20, meCar.y - s2 - sd + 5, 5, 5);
+        g.fillRect(cartTwo.x - 5, meCar.y - s2 - sd + 5, 5, 5);
+        g.fillRect(cartTwo.x + 20, meCar.y - s2 - sd + 40, 5, 5);
+        g.fillRect(cartTwo.x - 5, meCar.y - s2 - sd + 40, 5, 5);
 
         g.setColor(Color.WHITE);
-        g.fillRect(illu11.x, illu11.y, illu11.width, illu11.height);
-        g.fillRect(illu11.x + 170, illu11.y, 5, 25);
-        g.fillRect(illu12.x, illu12.y, illu12.width, illu12.height);
-        g.fillRect(illu12.x + 170, illu12.y, 5, 25);
-        g.fillRect(illu13.x, illu13.y, illu13.width, illu13.height);
-        g.fillRect(illu13.x + 170, illu13.y, 5, 25);
-        g.fillRect(illu21.x, illu21.y, illu21.width, illu21.height);
-        g.fillRect(illu22.x, illu22.y, illu22.width, illu22.height);
-        g.fillRect(illu23.x, illu23.y, illu23.width, illu23.height);
+        g.setFont(FONT_TITLE);
+        g.drawString("Distance travelled", 380, 170);
 
-        g.setColor(ME_CAR);
-        g.fillRect(myShip.x, myShip.y, 20, 50);
-
-        g.setColor(Color.BLACK);
-        g.fillRect(myShip.x + 20, myShip.y + 5, 5, 5);
-        g.fillRect(myShip.x - 5, myShip.y + 5, 5, 5);
-        g.fillRect(myShip.x + 20, myShip.y + 40, 5, 5);
-        g.fillRect(myShip.x - 5, myShip.y + 40, 5, 5);
-
-        g.setColor(OTHER_CAR_ONE);
-        g.fillRect(c1.x, myShip.y - s1 - sd, 20, 50);
-
-        g.setColor(Color.BLACK);
-        g.fillRect(c1.x + 20, myShip.y - s1 - sd + 5, 5, 5);
-        g.fillRect(c1.x - 5, myShip.y - s1 - sd + 5, 5, 5);
-        g.fillRect(c1.x + 20, myShip.y - s1 - sd + 40, 5, 5);
-        g.fillRect(c1.x - 5, myShip.y - s1 - sd + 40, 5, 5);
-
-        g.setColor(OTHER_CAR_TWO);
-        g.fillRect(c2.x, myShip.y - s2 - sd, 20, 50);
-
-        g.setColor(Color.BLACK);
-        g.fillRect(c2.x + 20, myShip.y - s2 - sd + 5, 5, 5);
-        g.fillRect(c2.x - 5, myShip.y - s2 - sd + 5, 5, 5);
-        g.fillRect(c2.x + 20, myShip.y - s2 - sd + 40, 5, 5);
-        g.fillRect(c2.x - 5, myShip.y - s2 - sd + 40, 5, 5);
-
-        g.drawString("Car - Dist. travelled", 380, 170);
+        g.setFont(FONT_NORMAL);
         String r1 = "Me     " + (-sd);
         g.drawString(r1, 380, 190);
-
         r1 = "C1     " + (s1);
         g.drawString(r1, 380, 210);
-
         r1 = "C2     " + (s2);
         g.drawString(r1, 380, 230);
 
+        g.setFont(FONT_TITLE);
         r1 = "Rank";
         g.drawString(r1, 380, 250);
 
+        g.setFont(FONT_NORMAL);
+        //First place
         int m = Math.max(s1, Math.max(s2, -sd));
-        String p;
-
-        if (s1 - m == 0)
-            p = "C1";
-        else if (s2 - m == 0)
-            p = "C2";
-        else
-            p = "Me";
-
-        r1 = "1." + p;
+        r1 = "1° " + getNameFromDriver(m);
         g.drawString(r1, 380, 270);
+        //Second place
         int m1 = Math.min(s1, Math.min(s2, -sd));
-
-        if (s1 - m1 == 0)
-            p = "C1";
-        else if (s2 - m1 == 0)
-            p = "C2";
-        else
-            p = "Me";
-
-        r1 = "3." + p;
+        r1 = "3° " + getNameFromDriver(m1);
         g.drawString(r1, 380, 310);
+        //Third place
         m = s1 + s2 - sd - m - m1;
-
-        if (s1 - m == 0)
-            p = "C1";
-        else if (s2 - m == 0)
-            p = "C2";
-        else
-            p = "Me";
-
-        r1 = "2." + p;
+        r1 = "2° " + getNameFromDriver(m);
         g.drawString(r1, 380, 290);
+
         repaint();
     }
 
+    private String getNameFromDriver(int distanceTravelled) {
+        if (s1 - distanceTravelled == 0)
+            return "C1";
+        else if (s2 - distanceTravelled == 0)
+            return "C2";
+        else
+            return "Me";
+    }
+
+    private Rectangle setXandYToCar(Rectangle car, int distanceY) {
+        if (car.x <= 50)
+            car.x = 50;
+        if (car.x >= 350)
+            car.x = 350;
+        if (car.y <= distanceY)
+            car.y = distanceY;
+        if (car.y > 380)
+            car.y = 380;
+
+        return car;
+    }
+
     public static void main(String[] args) {
-        String message = "Be Ready to Fly your Truck";
-        int result = JOptionPane.showConfirmDialog(null, message, "Dialog", JOptionPane.OK_CANCEL_OPTION);
+        String message = "Be Ready to Fly your Car";
+        int result = JOptionPane.showConfirmDialog(null, message, "Speed Up", JOptionPane.OK_CANCEL_OPTION);
 
         // Result equals OK
         if (result == 0) {
