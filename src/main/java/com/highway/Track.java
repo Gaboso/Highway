@@ -57,7 +57,7 @@ public class Track extends JFrame implements Runnable {
 
     private Rectangle meCar = new Rectangle(x, y, 20, 50);
 
-    private Rectangle road = new Rectangle(65, 0, 285, 1000);
+    private Rectangle road = new Rectangle(65, 0, 285, 500);
     private Rectangle leftBoundary = new Rectangle(45, 20, 20, 500);
     private Rectangle rightBoundary = new Rectangle(350, 20, 20, 500);
 
@@ -202,6 +202,8 @@ public class Track extends JFrame implements Runnable {
     }
 
     private void paintComponent(Graphics g) {
+        //Grass
+        g.drawImage(new ImageIcon(Track.class.getResource("/grass.jpg")).getImage(), 0, 0, this);
         //Left boundary
         g.setColor(COLOR_BOUNDARY);
         g.fillRect(leftBoundary.x, leftBoundary.y, leftBoundary.width, leftBoundary.height);
@@ -278,8 +280,7 @@ public class Track extends JFrame implements Runnable {
         g.drawString(r1, 380, 230);
 
         g.setFont(FONT_TITLE);
-        r1 = "Rank";
-        g.drawString(r1, 380, 250);
+        g.drawString("Rank", 380, 250);
 
         g.setFont(FONT_NORMAL);
         //First place
@@ -321,7 +322,7 @@ public class Track extends JFrame implements Runnable {
     }
 
     public static void main(String[] args) {
-        String message = "Be Ready to Fly your Car";
+        String message = "Be ready to race your car";
         int result = JOptionPane.showConfirmDialog(null, message, "Endless", JOptionPane.OK_CANCEL_OPTION);
 
         // Result equals OK
@@ -329,11 +330,8 @@ public class Track extends JFrame implements Runnable {
             Track su = new Track();
             Thread t1 = new Thread(su);
             t1.start();
-        } else {
-            // Result not equals OK
+        } else
             System.exit(0);
-        }
-
     }
 
 }
