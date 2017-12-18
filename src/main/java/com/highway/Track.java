@@ -31,9 +31,6 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-/**
- * Track Class
- */
 public class Track extends JFrame implements Runnable {
 
     private static final Logger LOGGER = Logger.getLogger(Track.class);
@@ -50,27 +47,33 @@ public class Track extends JFrame implements Runnable {
     private static final Font FONT_TITLE = new Font("Trebuchet MS", Font.BOLD, 14);
     private static final Font FONT_NORMAL = new Font("Trebuchet MS", Font.PLAIN, 12);
 
+    private static final int KERB_WIDTH = 20;
+    private static final int KERB_HEIGHT = 40;
+    private static final int LANE_DIVIDER_WIDTH = 5;
+    private static final int LANE_DIVIDER_HEIGHT = 25;
+    private static final int TIRE_WIDTH = 5;
+    private static final int TIRE_HEIGHT = 5;
+
     private int x;
     private int y;
     private int xDirection;
     private int yDirection;
 
-    private Rectangle meCar = new Rectangle(x, y, 20, 50);
+    private Rectangle playerCar = new Rectangle(x, y, 20, 50);
+    private Rectangle opponentOne = new Rectangle(100, 380, 20, 30);
+    private Rectangle opponentTwo = new Rectangle(300, 350, 30, 10);
 
     private Rectangle road = new Rectangle(65, 0, 285, 500);
     private Rectangle leftBoundary = new Rectangle(45, 20, 20, 500);
     private Rectangle rightBoundary = new Rectangle(350, 20, 20, 500);
 
-    private Rectangle carOne = new Rectangle(100, 380, 20, 30);
-    private Rectangle cartTwo = new Rectangle(300, 350, 30, 10);
+    private Rectangle rightKerbOne = new Rectangle(45, 90, KERB_WIDTH, KERB_HEIGHT);
+    private Rectangle rightKerbTwo = new Rectangle(350, 90, KERB_WIDTH, KERB_HEIGHT);
+    private Rectangle rightKerbThree = new Rectangle(45, 200, KERB_WIDTH, KERB_HEIGHT);
 
-    private Rectangle rightKerbOne = new Rectangle(45, 90, 20, 40);
-    private Rectangle rightKerbTwo = new Rectangle(350, 90, 20, 40);
-    private Rectangle rightKerbThree = new Rectangle(45, 200, 20, 40);
-
-    private Rectangle leftKerbOne = new Rectangle(350, 200, 20, 40);
-    private Rectangle leftKerbTwo = new Rectangle(45, 300, 20, 40);
-    private Rectangle leftKerbThree = new Rectangle(350, 300, 20, 40);
+    private Rectangle leftKerbOne = new Rectangle(350, 200, KERB_WIDTH, KERB_HEIGHT);
+    private Rectangle leftKerbTwo = new Rectangle(45, 300, KERB_WIDTH, KERB_HEIGHT);
+    private Rectangle leftKerbThree = new Rectangle(350, 300, KERB_WIDTH, KERB_HEIGHT);
 
     private int sd = 0;
     private int s1 = -30;
@@ -87,8 +90,8 @@ public class Track extends JFrame implements Runnable {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        meCar.x = 200;
-        meCar.y = 350;
+        playerCar.x = 200;
+        playerCar.y = 350;
     }
 
     private void move() {
@@ -107,11 +110,11 @@ public class Track extends JFrame implements Runnable {
         else if (w % 100 == 0)
             cd = 15;
 
-        meCar.x += xDirection;
-        meCar.y += yDirection;
+        playerCar.x += xDirection;
+        playerCar.y += yDirection;
 
-        carOne.y += cd;
-        cartTwo.y += cv;
+        opponentOne.y += cd;
+        opponentTwo.y += cv;
         sd += yDirection;
         s1 += cd;
         s2 += cv;
@@ -126,9 +129,9 @@ public class Track extends JFrame implements Runnable {
             leftKerbThree.y -= yDirection;
         }
 
-        meCar = setXandYToCar(meCar, 150);
-        carOne = setXandYToCar(carOne, 140);
-        cartTwo = setXandYToCar(cartTwo, 155);
+        playerCar = setXandYToCar(playerCar, 150);
+        opponentOne = setXandYToCar(opponentOne, 140);
+        opponentTwo = setXandYToCar(opponentTwo, 155);
 
         if (rightKerbOne.y >= 350)
             rightKerbOne.y = 50;
@@ -202,101 +205,135 @@ public class Track extends JFrame implements Runnable {
     }
 
     private void paintComponent(Graphics g) {
-        //Grass
-        g.drawImage(new ImageIcon(Track.class.getResource("/grass.jpg")).getImage(), 0, 0, this);
+        drawBoundary(g);
+        drawRoad(g);
+        drawLaneDividers(g);
+        drawAllKerbs(g);
+        drawAllCars(g);
+
+        drawTravelledDistance(g);
+        drawRank(g);
+
+        repaint();
+    }
+
+    private void drawRoad(Graphics g) {
+        g.setColor(Color.DARK_GRAY);
+        g.fillRect(road.x, road.y, road.width, road.height);
+    }
+
+    private void drawBoundary(Graphics g) {
         //Left boundary
         g.setColor(COLOR_BOUNDARY);
         g.fillRect(leftBoundary.x, leftBoundary.y, leftBoundary.width, leftBoundary.height);
         //Right boundary
         g.setColor(COLOR_BOUNDARY);
         g.fillRect(rightBoundary.x, rightBoundary.y, rightBoundary.width, rightBoundary.height);
-        //Road
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(road.x, road.y, road.width, road.height);
-        //Lane dividers
-        g.setColor(Color.YELLOW);
-        g.fillRect(rightKerbOne.x + 170, rightKerbOne.y, 5, 25);
-        g.fillRect(leftKerbTwo.x + 170, leftKerbTwo.y, 5, 25);
-        g.fillRect(rightKerbThree.x + 170, rightKerbThree.y, 5, 25);
-        //Right kerbs
-        g.setColor(Color.WHITE);
-        g.fillRect(rightKerbOne.x, rightKerbOne.y, rightKerbOne.width, rightKerbOne.height);
-        g.fillRect(leftKerbTwo.x, leftKerbTwo.y, leftKerbTwo.width, leftKerbTwo.height);
-        g.fillRect(rightKerbThree.x, rightKerbThree.y, rightKerbThree.width, rightKerbThree.height);
-        //Left kerbs
-        g.fillRect(leftKerbOne.x, leftKerbOne.y, leftKerbOne.width, leftKerbOne.height);
-        g.fillRect(rightKerbTwo.x, rightKerbTwo.y, rightKerbTwo.width, rightKerbTwo.height);
-        g.fillRect(leftKerbThree.x, leftKerbThree.y, leftKerbThree.width, leftKerbThree.height);
+    }
 
-        //Me car
-        g.setColor(COLOR_ME_CAR);
-        g.fillRect(meCar.x, meCar.y, 20, 50);
-        g.setColor(Color.WHITE);
-        g.setFont(FONT_TITLE);
-        g.drawString("10", meCar.x + 2, meCar.y + 30);
-        //Tires of me car
-        g.setColor(COLOR_TIRE);
-        g.fillRect(meCar.x + 20, meCar.y + 5, 5, 5);
-        g.fillRect(meCar.x - 5, meCar.y + 5, 5, 5);
-        g.fillRect(meCar.x + 20, meCar.y + 40, 5, 5);
-        g.fillRect(meCar.x - 5, meCar.y + 40, 5, 5);
-
-        //Car one
-        g.setColor(COLOR_CAR_ONE);
-        g.fillRect(carOne.x, meCar.y - s1 - sd, 20, 50);
-        g.setColor(Color.WHITE);
-        g.setFont(FONT_TITLE);
-        g.drawString("51", carOne.x + 3, (meCar.y - s1 - sd) + 30);
-        //Tires of car one
-        g.setColor(COLOR_TIRE);
-        g.fillRect(carOne.x + 20, meCar.y - s1 - sd + 5, 5, 5);
-        g.fillRect(carOne.x - 5, meCar.y - s1 - sd + 5, 5, 5);
-        g.fillRect(carOne.x + 20, meCar.y - s1 - sd + 40, 5, 5);
-        g.fillRect(carOne.x - 5, meCar.y - s1 - sd + 40, 5, 5);
-
-        //Car two
-        g.setColor(COLOR_CAR_TWO);
-        g.fillRect(cartTwo.x, meCar.y - s2 - sd, 20, 50);
-        g.setColor(Color.WHITE);
-        g.setFont(FONT_TITLE);
-        g.drawString("99", cartTwo.x + 3, (meCar.y - s2 - sd) + 30);
-        //Tires of car two
-        g.setColor(COLOR_TIRE);
-        g.fillRect(cartTwo.x + 20, meCar.y - s2 - sd + 5, 5, 5);
-        g.fillRect(cartTwo.x - 5, meCar.y - s2 - sd + 5, 5, 5);
-        g.fillRect(cartTwo.x + 20, meCar.y - s2 - sd + 40, 5, 5);
-        g.fillRect(cartTwo.x - 5, meCar.y - s2 - sd + 40, 5, 5);
-
-        g.setColor(Color.WHITE);
-        g.setFont(FONT_TITLE);
-        g.drawString("Distance travelled", 380, 170);
-
-        g.setFont(FONT_NORMAL);
-        String r1 = "Me:         " + (-sd);
-        g.drawString(r1, 380, 190);
-        r1 = "Red Devil: " + (s1);
-        g.drawString(r1, 380, 210);
-        r1 = "Mad Dog:  " + (s2);
-        g.drawString(r1, 380, 230);
-
+    private void drawRank(Graphics g) {
         g.setFont(FONT_TITLE);
         g.drawString("Rank", 380, 250);
 
         g.setFont(FONT_NORMAL);
         //First place
         int m = Math.max(s1, Math.max(s2, -sd));
-        r1 = "1° " + getNameFromDriver(m);
-        g.drawString(r1, 380, 270);
+        g.drawString("1° " + getNameFromDriver(m), 380, 270);
         //Second place
         int m1 = Math.min(s1, Math.min(s2, -sd));
-        r1 = "3° " + getNameFromDriver(m1);
-        g.drawString(r1, 380, 310);
+        g.drawString("3° " + getNameFromDriver(m1), 380, 310);
         //Third place
         m = s1 + s2 - sd - m - m1;
-        r1 = "2° " + getNameFromDriver(m);
-        g.drawString(r1, 380, 290);
+        g.drawString("2° " + getNameFromDriver(m), 380, 290);
+    }
 
-        repaint();
+    private void drawTravelledDistance(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.setFont(FONT_TITLE);
+        g.drawString("Distance travelled", 380, 170);
+
+        g.setFont(FONT_NORMAL);
+        g.drawString("Me:         " + (-sd), 380, 190);
+        g.drawString("Red Devil: " + (s1), 380, 210);
+        g.drawString("Mad Dog:  " + (s2), 380, 230);
+    }
+
+    private void drawLaneDividers(Graphics g) {
+        g.setColor(Color.YELLOW);
+        g.fillRect(rightKerbOne.x + 170, rightKerbOne.y, LANE_DIVIDER_WIDTH, LANE_DIVIDER_HEIGHT);
+        g.fillRect(leftKerbTwo.x + 170, leftKerbTwo.y, LANE_DIVIDER_WIDTH, LANE_DIVIDER_HEIGHT);
+        g.fillRect(rightKerbThree.x + 170, rightKerbThree.y, LANE_DIVIDER_WIDTH, LANE_DIVIDER_HEIGHT);
+    }
+
+    private void drawAllCars(Graphics g) {
+        drawPlayerCar(g);
+        drawOpponentOne(g);
+        drawOpponentTwo(g);
+    }
+
+    private void drawAllKerbs(Graphics g) {
+        //Kerbs
+        g.setColor(Color.WHITE);
+        drawKerb(g, rightKerbOne);
+        drawKerb(g, leftKerbOne);
+
+        drawKerb(g, rightKerbTwo);
+        drawKerb(g, leftKerbTwo);
+
+        drawKerb(g, rightKerbThree);
+        drawKerb(g, leftKerbThree);
+    }
+
+    private void drawKerb(Graphics g, Rectangle kerb) {
+        g.fillRect(kerb.x, kerb.y, kerb.width, kerb.height);
+    }
+
+    private void drawPlayerCar(Graphics g) {
+        //Player car
+        g.setColor(COLOR_ME_CAR);
+        g.fillRect(playerCar.x, playerCar.y, 20, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(FONT_TITLE);
+        g.drawString("10", playerCar.x + 2, playerCar.y + 30);
+
+        //Tires
+        g.setColor(COLOR_TIRE);
+        g.fillRect(playerCar.x + 20, playerCar.y + 5, TIRE_WIDTH, TIRE_HEIGHT);
+        g.fillRect(playerCar.x - 5, playerCar.y + 5, TIRE_WIDTH, TIRE_HEIGHT);
+        g.fillRect(playerCar.x + 20, playerCar.y + 40, TIRE_WIDTH, TIRE_HEIGHT);
+        g.fillRect(playerCar.x - 5, playerCar.y + 40, TIRE_WIDTH, TIRE_HEIGHT);
+    }
+
+    private void drawOpponentOne(Graphics g) {
+        //Opponent One
+        g.setColor(COLOR_CAR_ONE);
+        g.fillRect(opponentOne.x, playerCar.y - s1 - sd, 20, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(FONT_TITLE);
+        g.drawString("51", opponentOne.x + 3, (playerCar.y - s1 - sd) + 30);
+
+        //Tires
+        g.setColor(COLOR_TIRE);
+        g.fillRect(opponentOne.x + 20, playerCar.y - s1 - sd + 5, TIRE_WIDTH, TIRE_HEIGHT);
+        g.fillRect(opponentOne.x - 5, playerCar.y - s1 - sd + 5, TIRE_WIDTH, TIRE_HEIGHT);
+        g.fillRect(opponentOne.x + 20, playerCar.y - s1 - sd + 40, TIRE_WIDTH, TIRE_HEIGHT);
+        g.fillRect(opponentOne.x - 5, playerCar.y - s1 - sd + 40, TIRE_WIDTH, TIRE_HEIGHT);
+    }
+
+    private void drawOpponentTwo(Graphics g) {
+        //Opponent Two
+        g.setColor(COLOR_CAR_TWO);
+        g.fillRect(opponentTwo.x, playerCar.y - s2 - sd, 20, 50);
+        g.setColor(Color.WHITE);
+        g.setFont(FONT_TITLE);
+        g.drawString("99", opponentTwo.x + 3, (playerCar.y - s2 - sd) + 30);
+
+        //Tires
+        g.setColor(COLOR_TIRE);
+        g.fillRect(opponentTwo.x + 20, playerCar.y - s2 - sd + 5, TIRE_WIDTH, TIRE_HEIGHT);
+        g.fillRect(opponentTwo.x - 5, playerCar.y - s2 - sd + 5, TIRE_WIDTH, TIRE_HEIGHT);
+        g.fillRect(opponentTwo.x + 20, playerCar.y - s2 - sd + 40, TIRE_WIDTH, TIRE_HEIGHT);
+        g.fillRect(opponentTwo.x - 5, playerCar.y - s2 - sd + 40, TIRE_WIDTH, TIRE_HEIGHT);
     }
 
     private String getNameFromDriver(int distanceTravelled) {
