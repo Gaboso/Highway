@@ -129,9 +129,9 @@ public class Track extends JFrame implements Runnable {
             leftKerbThree.y -= yDirection;
         }
 
-        playerCar = setXandYToCar(playerCar, 150);
-        opponentOne = setXandYToCar(opponentOne, 140);
-        opponentTwo = setXandYToCar(opponentTwo, 155);
+        playerCar = setXYToCar(playerCar, 150);
+        opponentOne = setXYToCar(opponentOne, 140);
+        opponentTwo = setXYToCar(opponentTwo, 155);
 
         if (rightKerbOne.y >= 350)
             rightKerbOne.y = 50;
@@ -337,23 +337,28 @@ public class Track extends JFrame implements Runnable {
     }
 
     private String getNameFromDriver(int distanceTravelled) {
-        if (s1 - distanceTravelled == 0)
+        if (s1 - distanceTravelled == 0) {
             return "Red Devil";
-        else if (s2 - distanceTravelled == 0)
+        } else if (s2 - distanceTravelled == 0) {
             return "Mad Dog";
-        else
+        } else {
             return "Me";
+        }
     }
 
-    private Rectangle setXandYToCar(Rectangle car, int distanceY) {
-        if (car.x <= 50)
+    private Rectangle setXYToCar(Rectangle car, int distanceY) {
+        if (car.x <= 50) {
             car.x = 50;
-        if (car.x >= 350)
+        }
+        if (car.x >= 350) {
             car.x = 350;
-        if (car.y <= distanceY)
+        }
+        if (car.y <= distanceY) {
             car.y = distanceY;
-        if (car.y > 380)
+        }
+        if (car.y > 380) {
             car.y = 380;
+        }
 
         return car;
     }
@@ -364,11 +369,12 @@ public class Track extends JFrame implements Runnable {
 
         // Result equals OK
         if (result == 0) {
-            Track su = new Track();
-            Thread t1 = new Thread(su);
-            t1.start();
-        } else
+            Track track = new Track();
+            Thread thread = new Thread(track);
+            thread.start();
+        } else {
             System.exit(0);
+        }
     }
 
 }
