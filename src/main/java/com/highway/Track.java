@@ -26,10 +26,13 @@ SOFTWARE.
 
 import org.apache.log4j.Logger;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.net.URI;
 
 public class Track extends JFrame implements Runnable {
 
@@ -289,51 +292,27 @@ public class Track extends JFrame implements Runnable {
     }
 
     private void drawPlayerCar(Graphics g) {
-        //Player car
-        g.setColor(COLOR_ME_CAR);
-        g.fillRect(playerCar.x, playerCar.y, 20, 50);
-        g.setColor(Color.WHITE);
-        g.setFont(FONT_TITLE);
-        g.drawString("10", playerCar.x + 2, playerCar.y + 30);
-
-        //Tires
-        g.setColor(COLOR_TIRE);
-        g.fillRect(playerCar.x + 20, playerCar.y + 5, TIRE_WIDTH, TIRE_HEIGHT);
-        g.fillRect(playerCar.x - 5, playerCar.y + 5, TIRE_WIDTH, TIRE_HEIGHT);
-        g.fillRect(playerCar.x + 20, playerCar.y + 40, TIRE_WIDTH, TIRE_HEIGHT);
-        g.fillRect(playerCar.x - 5, playerCar.y + 40, TIRE_WIDTH, TIRE_HEIGHT);
+        drawCar("red_car.png", playerCar.x, playerCar.y, g);
     }
 
     private void drawOpponentOne(Graphics g) {
-        //Opponent One
-        g.setColor(COLOR_CAR_ONE);
-        g.fillRect(opponentOne.x, playerCar.y - s1 - sd, 20, 50);
-        g.setColor(Color.WHITE);
-        g.setFont(FONT_TITLE);
-        g.drawString("51", opponentOne.x + 3, (playerCar.y - s1 - sd) + 30);
-
-        //Tires
-        g.setColor(COLOR_TIRE);
-        g.fillRect(opponentOne.x + 20, playerCar.y - s1 - sd + 5, TIRE_WIDTH, TIRE_HEIGHT);
-        g.fillRect(opponentOne.x - 5, playerCar.y - s1 - sd + 5, TIRE_WIDTH, TIRE_HEIGHT);
-        g.fillRect(opponentOne.x + 20, playerCar.y - s1 - sd + 40, TIRE_WIDTH, TIRE_HEIGHT);
-        g.fillRect(opponentOne.x - 5, playerCar.y - s1 - sd + 40, TIRE_WIDTH, TIRE_HEIGHT);
+        drawCar("blue_car.png", opponentOne.x, playerCar.y - s1 - sd, g);
     }
 
     private void drawOpponentTwo(Graphics g) {
-        //Opponent Two
-        g.setColor(COLOR_CAR_TWO);
-        g.fillRect(opponentTwo.x, playerCar.y - s2 - sd, 20, 50);
-        g.setColor(Color.WHITE);
-        g.setFont(FONT_TITLE);
-        g.drawString("99", opponentTwo.x + 3, (playerCar.y - s2 - sd) + 30);
+        drawCar("taxi.png", opponentTwo.x, playerCar.y - s2 - sd, g);
+    }
 
-        //Tires
-        g.setColor(COLOR_TIRE);
-        g.fillRect(opponentTwo.x + 20, playerCar.y - s2 - sd + 5, TIRE_WIDTH, TIRE_HEIGHT);
-        g.fillRect(opponentTwo.x - 5, playerCar.y - s2 - sd + 5, TIRE_WIDTH, TIRE_HEIGHT);
-        g.fillRect(opponentTwo.x + 20, playerCar.y - s2 - sd + 40, TIRE_WIDTH, TIRE_HEIGHT);
-        g.fillRect(opponentTwo.x - 5, playerCar.y - s2 - sd + 40, TIRE_WIDTH, TIRE_HEIGHT);
+    private void drawCar(String carName, int x, int y, Graphics graphics) {
+        try {
+            URI uri = Track.class.getClassLoader().getResource(carName).toURI();
+
+            File pathToFile = new File(uri);
+            Image car = ImageIO.read(pathToFile);
+            graphics.drawImage(car, x, y, null);
+        } catch (Exception ex) {
+            LOGGER.error(ex.getMessage(), ex);
+        }
     }
 
     private String getNameFromDriver(int distanceTravelled) {
@@ -364,8 +343,7 @@ public class Track extends JFrame implements Runnable {
     }
 
     public static void main(String[] args) {
-        String message = "Be ready to race your car";
-        int result = JOptionPane.showConfirmDialog(null, message, "Endless", JOptionPane.OK_CANCEL_OPTION);
+        int result = JOptionPane.showConfirmDialog(null, "Be ready to race your car", "Endless", JOptionPane.OK_CANCEL_OPTION);
 
         // Result equals OK
         if (result == 0) {
