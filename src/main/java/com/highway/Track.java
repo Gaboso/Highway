@@ -40,11 +40,7 @@ public class Track extends JFrame implements Runnable {
 
     //Colors
     private static final Color BACKGROUND_COLOR = Color.decode("#4CAF50");
-    private static final Color COLOR_CAR_ONE = Color.decode("#D50000");
-    private static final Color COLOR_CAR_TWO = Color.decode("#00C853");
-    private static final Color COLOR_ME_CAR = Color.decode("#0091EA");
     private static final Color COLOR_BOUNDARY = Color.decode("#D32F2F");
-    private static final Color COLOR_TIRE = Color.decode("#212121");
 
     //Fonts
     private static final Font FONT_TITLE = new Font("Trebuchet MS", Font.BOLD, 14);
@@ -54,8 +50,6 @@ public class Track extends JFrame implements Runnable {
     private static final int KERB_HEIGHT = 40;
     private static final int LANE_DIVIDER_WIDTH = 5;
     private static final int LANE_DIVIDER_HEIGHT = 25;
-    private static final int TIRE_WIDTH = 5;
-    private static final int TIRE_HEIGHT = 5;
 
     private int x;
     private int y;
@@ -101,17 +95,19 @@ public class Track extends JFrame implements Runnable {
         int cv = 2;
         int cd = 2;
 
-        if (w % 13 == 0)
+        if (w % 13 == 0) {
             cv = 5;
-        else if (w % 17 == 0)
+        } else if (w % 17 == 0) {
             cv = 2;
+        }
 
-        if (w % 11 == 0)
+        if (w % 11 == 0) {
             cd = 5;
-        else if (w % 17 == 0)
+        } else if (w % 17 == 0) {
             cd = 2;
-        else if (w % 100 == 0)
+        } else if (w % 100 == 0) {
             cd = 15;
+        }
 
         playerCar.x += xDirection;
         playerCar.y += yDirection;
@@ -136,18 +132,24 @@ public class Track extends JFrame implements Runnable {
         opponentOne = setXYToCar(opponentOne, 140);
         opponentTwo = setXYToCar(opponentTwo, 155);
 
-        if (rightKerbOne.y >= 350)
+        if (rightKerbOne.y >= 350) {
             rightKerbOne.y = 50;
-        if (rightKerbThree.y >= 350)
+        }
+        if (rightKerbThree.y >= 350) {
             rightKerbThree.y = 50;
-        if (leftKerbTwo.y >= 350)
+        }
+        if (leftKerbTwo.y >= 350) {
             leftKerbTwo.y = 50;
-        if (rightKerbTwo.y >= 350)
+        }
+        if (rightKerbTwo.y >= 350) {
             rightKerbTwo.y = 50;
-        if (leftKerbOne.y >= 350)
+        }
+        if (leftKerbOne.y >= 350) {
             leftKerbOne.y = 50;
-        if (leftKerbThree.y >= 350)
+        }
+        if (leftKerbThree.y >= 350) {
             leftKerbThree.y = 50;
+        }
     }
 
     @Override
@@ -175,27 +177,35 @@ public class Track extends JFrame implements Runnable {
         @Override
         public void keyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
-            if (keyCode == KeyEvent.VK_LEFT)
+            if (keyCode == KeyEvent.VK_LEFT) {
                 setXDirection(-3);
-            if (keyCode == KeyEvent.VK_RIGHT)
+            }
+            if (keyCode == KeyEvent.VK_RIGHT) {
                 setXDirection(+3);
-            if (keyCode == KeyEvent.VK_UP)
+            }
+            if (keyCode == KeyEvent.VK_UP) {
                 setYDirection(-3);
-            if (keyCode == KeyEvent.VK_DOWN)
+            }
+            if (keyCode == KeyEvent.VK_DOWN) {
                 setYDirection(+3);
+            }
         }
 
         @Override
         public void keyReleased(KeyEvent e) {
             int keyCode = e.getKeyCode();
-            if (keyCode == KeyEvent.VK_LEFT)
+            if (keyCode == KeyEvent.VK_LEFT) {
                 setXDirection(0);
-            if (keyCode == KeyEvent.VK_RIGHT)
+            }
+            if (keyCode == KeyEvent.VK_RIGHT) {
                 setXDirection(0);
-            if (keyCode == KeyEvent.VK_UP)
+            }
+            if (keyCode == KeyEvent.VK_UP) {
                 setYDirection(0);
-            if (keyCode == KeyEvent.VK_DOWN)
+            }
+            if (keyCode == KeyEvent.VK_DOWN) {
                 setYDirection(0);
+            }
         }
     }
 
@@ -257,8 +267,8 @@ public class Track extends JFrame implements Runnable {
 
         g.setFont(FONT_NORMAL);
         g.drawString("Me:         " + (-sd), 380, 190);
-        g.drawString("Red Devil: " + (s1), 380, 210);
-        g.drawString("Mad Dog:  " + (s2), 380, 230);
+        g.drawString("Ayrton Penna: " + (s1), 380, 210);
+        g.drawString("Rubens Chinello:  " + (s2), 380, 230);
     }
 
     private void drawLaneDividers(Graphics g) {
@@ -292,15 +302,15 @@ public class Track extends JFrame implements Runnable {
     }
 
     private void drawPlayerCar(Graphics g) {
-        drawCar("red_car.png", playerCar.x, playerCar.y, g);
+        drawCar("blue_car.png", playerCar.x, playerCar.y, g);
     }
 
     private void drawOpponentOne(Graphics g) {
-        drawCar("blue_car.png", opponentOne.x, playerCar.y - s1 - sd, g);
+        drawCar("green_car.png", opponentOne.x, playerCar.y - s1 - sd, g);
     }
 
     private void drawOpponentTwo(Graphics g) {
-        drawCar("taxi.png", opponentTwo.x, playerCar.y - s2 - sd, g);
+        drawCar("yellow_truck.png", opponentTwo.x, playerCar.y - s2 - sd, g);
     }
 
     private void drawCar(String carName, int x, int y, Graphics graphics) {
@@ -317,9 +327,9 @@ public class Track extends JFrame implements Runnable {
 
     private String getNameFromDriver(int distanceTravelled) {
         if (s1 - distanceTravelled == 0) {
-            return "Red Devil";
+            return "Ayrton Penna";
         } else if (s2 - distanceTravelled == 0) {
-            return "Mad Dog";
+            return "Rubens Chinello";
         } else {
             return "Me";
         }
